@@ -102,9 +102,7 @@ exports.removeById = function (req, res) {
 exports.sendPushNotification = function (request, result) {
     var token = request.query.token;
     var senderName = request.query.name;
- //   console.log(token)
- //   token = "APA91bGz3FY7xsDABZJGwaBZ4_q_RZNT4y0NDsnkX16e33xqsm6zraX79MA5xwgO3Os4o5_B8i5U54LfE9J325D0JrfwpDBgO-kwYB5QbO35e6rtBOYMQHA7JOmoC1ZMt5RDigR-qQOd";
-//    console.log(token)
+
     var http = require('http');
     
     var data = {
