@@ -3,7 +3,8 @@
 var requestSchema = new mongoose.Schema({
     desc: String,
     location : { type: [Number], index: '2d' },
-    user: String,
+    firstName: String,
+    lastName: String,
     startTime: { type: Date, default: Date.now },
     closeTime: { type: Date, default: null },
     category: String,

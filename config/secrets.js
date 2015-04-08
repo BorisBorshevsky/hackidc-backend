@@ -22,7 +22,7 @@
 module.exports = {
 
  // db: process.env.MONGODB || 'mongodb://localhost:27017/test',
-    db: process.env.MONGODB || 'mongodb://54.69.105.17:27017/test',
+    db: process.env.MONGODB || 'mongodb://54.69.34.206:27017/test',
   sessionSecret: process.env.SESSION_SECRET || 'Your Session Secret goes here',
 
   mailgun: {
