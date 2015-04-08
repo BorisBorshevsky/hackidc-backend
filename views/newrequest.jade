@@ -1,0 +1,36 @@
+﻿extends layout
+
+block content
+  .page-header
+    h3 Send Request
+  form.form-horizontal(id='signup-form', method='POST')
+    input(type='hidden', name='_csrf', value=_csrf)
+    .form-group
+      label.col-sm-3.control-label(for='desc') Description
+      .col-sm-7
+        input.form-control(type='text', name='desc', id='desc', placeholder='Description', autofocus)
+    .form-group
+      label.col-sm-3.control-label(for='longitude') userName
+      .col-sm-7
+        input.form-control(type='text', name='userName', id='userName', placeholder='userName',value='1')
+    .form-group
+      label.col-sm-3.control-label(for='longitude') Longitude
+      .col-sm-7
+        input.form-control(type='text', name='longitude', id='longitude', placeholder='Longitude',value='34.835076')
+    .form-group
+      label.col-sm-3.control-label(for='latitude') Latitude
+      .col-sm-7
+        input.form-control(type='text', name='latitude', id='latitude', placeholder='Latitude',value='32.1759179')
+    .form-group
+      label.col-sm-3.control-label(for='category') Category
+      .col-sm-7
+        input.form-control(type='text', name='category', id='category', placeholder='Category')
+    .form-group
+      .col-sm-offset-3.
+      label.col-sm-3.control-label(for='amount') Amount
+      .col-sm-7
+        input.form-control(type='text', name='amount', id='amount', placeholder='Amount',value="100")
+    .form-groupcol-sm-7
+        button.btn.btn-success(type='submit')
+          i.fa.fa-user-plus
+          | Add Request
