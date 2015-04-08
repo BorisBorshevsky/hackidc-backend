@@ -1,13 +1,14 @@
 ﻿var Request = require('../models/Request');
+var gcm = require('node-gcm');
 
 /**
  * GET /newrequest
  */
-exports.newrequest = function (req, res) {
-    //res.render('newrequest', {
-    //    title: 'Display Add Request'
-    //});
-    res.redirect('/newrequest');
+exports.newRequest = function (req, res) {
+    res.render('newrequest', {
+        title: 'Display Add Request'
+    });
+    //res.redirect('/newrequest');
 };
 
 /**
@@ -26,17 +27,21 @@ exports.addRequest = function (req, res, next) {
     //    return res.redirect('/signup');
     //}
     //console.error(req);
+    console.log(req.body);
     var request = new Request({
         desc: req.body.desc,
         location : [req.body.longitude, req.body.latitude],
         category: req.body.category,
-        amount: req.body.amount
+        amount: req.body.amount,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        deviceToken: req.body.deviceToken
     });
     
     request.save(function (err) {
         console.error(err);
         if (err) return next(err);
-        res.send("Success");
+        res.redirect('/newrequest');
     });
 };
 
@@ -46,14 +51,8 @@ exports.addRequest = function (req, res, next) {
  */
 exports.getAllRequests = function (req, res) {
     Request.find({}, function (err, requests) {
-        var requestMap = {};
         
-        requests.forEach(function (request) {
-            console.log(request.desc);
-            requestMap[request._id] = request;
-        });
-        
-        res.send(requestMap);
+        res.send(requests);
     });
 };
 
@@ -89,4 +88,78 @@ exports.clearRequests = function (req, res) {
         if (err) return next(err);
         res.send("Success");
     });
+};
+
+
+exports.removeById = function (req, res) {
+    Request.remove({ "_id": ObjectId(req.params.id) },function (err) {
+        console.error(err);
+        if (err) return next(err);
+        res.send("Success");
+    });
+};
+
+
+exports.sendPushNotification = function (request, res) {
+    var token = request.params.token;
+    var senderName = request.params.name;
+    
+
+    var http = require('http');
+    
+    var data = {
+        "collapseKey": "applice",
+        "delayWhileIdle": true,
+        "timeToLive": 3,
+        "data": {
+            "message": "My message",
+            "title": "My Title",
+            "name": senderName
+        },
+        "registration_ids": [token]
+    };
+    
+    var dataString = JSON.stringify(data);
+    var headers = {
+        'Authorization' : 'key=AIzaSyDn4m3wHDacjE5IivzgAt5Fi2A0JrFbb8A',
+        'Content-Type' : 'application/json',
+        'Content-Length' : dataString.length
+    };
+    
+    var options = {
+        host: 'android.googleapis.com',
+        port: 80,
+        path: '/gcm/send',
+        method: 'POST',
+        headers: headers
+    };
+    
+    //Setup the request 
+    var req = http.request(options, function (res) {
+        res.setEncoding('utf-8');
+        
+        var responseString = '';
+        
+        res.on('data', function (data) {
+            responseString += data;
+        });
+        
+        res.on('end', function () {
+            var resultObject = JSON.parse(responseString);
+            console.log(resultObject);
+            res.send(responseString);
+        });
+        console.log('STATUS: ' + res.statusCode);
+        console.log('HEADERS: ' + JSON.stringify(res.headers));
+
+    });
+    
+    req.on('error', function (e) {
+        // TODO: handle error.
+        console.log('error : ' + e.message + e.code);
+        res.send(e);
+    });
+    
+    req.write(dataString);
+    req.end();
 };

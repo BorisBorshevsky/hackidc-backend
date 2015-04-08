@@ -3,10 +3,9 @@
 var requestSchema = new mongoose.Schema({
     desc: String,
     location : { type: [Number], index: '2d' },
-    firstName: String,
-    lastName: String,
+    userName: String,
+    deviceToken: { type: String, default: "a1" },
     startTime: { type: Date, default: Date.now },
-    closeTime: { type: Date, default: null },
     category: String,
     amount: Number,
     userId: { type: String, default:"unknown" }

@@ -3,10 +3,12 @@
 var requestSchema = new mongoose.Schema({
     desc: String,
     location : { type: [Number], index: '2d' },
-    user: String,
+    firstName: String,
+    lastName: String,
+    deviceToken: { type: String, default: "a1" },
     startTime: { type: Date, default: Date.now },
-    closeTime: { type: Date, default: null },
     category: String,
-    amount: Number
+    amount: Number,
+    userId: { type: String, default:"unknown" }
 });
 module.exports = mongoose.model('Request', requestSchema);

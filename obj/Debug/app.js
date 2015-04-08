@@ -55,7 +55,6 @@ mongoose.connection.on('error', function() {
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(compress());
 app.use(connectAssets({
   paths: [path.join(__dirname, 'public/css'), path.join(__dirname, 'public/js')]
@@ -76,11 +75,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
-app.use(lusca({
-  csrf: true,
-  xframe: 'SAMEORIGIN',
-  xssProtection: true
-}));
+
 app.use(function(req, res, next) {
   res.locals.user = req.user;
   next();
@@ -112,11 +107,13 @@ app.post('/account/password', passportConf.isAuthenticated, userController.postU
 app.post('/account/delete', passportConf.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConf.isAuthenticated, userController.getOauthUnlink);
 
-app.get('/clearrequests', requestController.clearrequests);
-app.get('/newrequest', requestController.newrequest);
+app.get('/clearrequests', requestController.clearRequests);
+app.get('/newrequest', requestController.newRequest);
 app.get('/getAllRequests', requestController.getAllRequests);
 app.get('/getRequestByLocation/:longitude/:latitude', requestController.getRequestByLocation);
 app.post('/newrequest', requestController.addRequest);
+app.get('/removebyid', requestController.removeById);
+app.get('/sendpushnotification', requestController.sendPushNotification);
 
 /**
  * API examples routes.
